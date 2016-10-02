@@ -1,4 +1,5 @@
 import getpass
+import os
 
 # Define what should be printed out, hangman image
 #   +---+
@@ -37,41 +38,50 @@ print "\n"
 word = list(getpass.getpass("{}, give me a word!\nWhat you type won't show on the screen, let's keep it secret! ".format(players[0])).upper())
 print "\n"
 
-# Write out the empty spaces as a list, this needs to be a new list
+# Create the empty spaces as a list, this needs to be a new list
 empty_word = ["_"] * len(word)
-print empty_word, "\n"
 
 # Create a list to fill with the incorrect guesses
 error_list = []
 
-# Contiue the loop untill player have guessed wrong 11 times
+# Contiue the loop untill player have guessed wrong as many times as there are cases
 count = len(image_list)
+os.system('clear')
+print empty_word, "\n"
+
 while count > 0:
+
     # Ask player 2 for a character and check if it is in the word.
     # If it is, add it to the empty list
     guess = raw_input("Give me a guess {}! ".format(players[1])).upper()
-    print "\n"
 
     for pos, char in enumerate(word):
         if char == guess:
             empty_word[pos] = guess
 
-    # If char not in word, append to error list, print hangman and count -1
+    # If char not in word, append to error list and count -1
     if not (guess in word):
         error_list.append(guess)
-        print image_list[(count - 1)]
         count -= 1
+
+    # Clear screen and display image (if there has been an "error"-guess)
+    os.system('clear')
+    if count != len(image_list):
+        print image_list[(count)]
+    print "\n"
 
     # Print the count, the "empty" word and the error list
     print "Guesses left: {}".format(count)
     print "Word: {}".format(empty_word)
     print "Used letters: {}".format(error_list)
-    print "\n\n\n"
+    print "\n\n"
     # If the "empty" word equals the real word, the player has won!
     if word == empty_word:
         print "You won the game {}!!".format(players[1])
+        print "\n\n"
         break
 
     # If the player has guessed wrong 11 times, the player loses
     if count == 0:
         print "You've used all your guessess. Better luck next time {}!".format(players[1])
+        print "\n\n"
